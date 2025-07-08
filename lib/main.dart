@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:veegify/feautures/presentation/pages/auth/login_page.dart';
+import 'package:provider/provider.dart';
+import 'package:veegify/provider/auth_provider.dart';
+import 'package:veegify/views/login_page.dart';
+import 'package:veegify/widgets/bottom_navbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,19 +11,19 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+ 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Veegify',
-      theme: ThemeData(
-      
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<BottomNavbarProvider>(create: (_)=>BottomNavbarProvider()),
+        ChangeNotifierProvider(create: (_)=> AuthProvider())
+      ],
+      child:const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: LoginPage(),
       ),
-      home:const LoginPage()
-    );
+      );
   }
 }
 

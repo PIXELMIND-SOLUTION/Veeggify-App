@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veegify/provider/auth_provider.dart';
 import 'package:veegify/views/login_page.dart';
+import 'package:veegify/views/splash_screen.dart';
 import 'package:veegify/widgets/bottom_navbar.dart';
 
 void main() {
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       ],
       child:const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: SplashScreen(),
       ),
       );
   }

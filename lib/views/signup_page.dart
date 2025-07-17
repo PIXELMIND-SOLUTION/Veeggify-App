@@ -1,58 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veegify/provider/auth_provider.dart';
-import 'package:veegify/views/otp_screen.dart';
+import 'package:veegify/views/login_page.dart';
 
 class SignupPage extends StatefulWidget {
-  SignupPage({super.key});
+  const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController firstNameController = TextEditingController();
-
   final TextEditingController lastNameController = TextEditingController();
-
   final TextEditingController phoneController = TextEditingController();
-
   final TextEditingController emailController = TextEditingController();
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final TextEditingController referalController = TextEditingController();
 
   void handleSubmit() {
-    print("Helooooooooooooo");
-  if (_formKey.currentState!.validate()) {
-        print("Helooooooooooooo");
+    if (_formKey.currentState!.validate()) {
+      final firstName = firstNameController.text.trim();
+      final lastName = lastNameController.text.trim();
+      final phone = phoneController.text.trim();
+      final email = emailController.text.trim();
+      final referalCode = referalController.text.trim();
 
-    // ✅ Get values from controllers
-    String firstName = firstNameController.text.trim();
-    String lastName = lastNameController.text.trim();
-    String phone = phoneController.text.trim();
-    String email = emailController.text.trim();
-
-    // ✅ You can print, send to API, or pass to next screen
-    print('First Name: $firstName');
-    print('Last Name: $lastName');
-    print('Phone: $phone');
-    print('Email: $email');
-
-    context.read<AuthProvider>().register(
-      firstName: firstName,
-      lastName: lastName,
-      phone: phone,
-      email: email,
-      context: context,
-    );
-  }else{
-      print("Helooooooooooooo");
-
+      context.read<AuthProvider>().register(
+            firstName: firstName,
+            lastName: lastName,
+            phone: phone,
+            email: email,
+            referalCode: referalCode,
+            context: context,
+          );
+    }
   }
-
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,47 +47,25 @@ class _SignupPageState extends State<SignupPage> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 30),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 4,
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: const CircleAvatar(
-                    radius: 140,
-                    backgroundImage: NetworkImage(
-                      'https://cdni.iconscout.com/illustration/premium/thumb/boy-and-girl-doing-id-registration-illustration-download-in-svg-png-gif-file-formats--signup-create-account-online-form-sign-up-pack-miscellaneous-illustrations-7508887.png',
-                    ),
-                  ),
-                ),
+                Image.asset("assets/images/signup.png", width: 300, height: 300),
                 const SizedBox(height: 30),
                 const Text(
                   'Create your new account',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const SizedBox(height: 30),
+
+                // First and Last Name
                 Row(
                   children: [
                     Expanded(
                       child: TextFormField(
                         controller: firstNameController,
-                        decoration: InputDecoration(
-                          labelText: 'First Name*',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
+                        decoration: _inputDecoration('First Name*'),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your first name';
+                          if (value == null || value.trim().isEmpty) {
+                            return 'First name is required';
                           }
                           return null;
                         },
@@ -113,14 +75,10 @@ class _SignupPageState extends State<SignupPage> {
                     Expanded(
                       child: TextFormField(
                         controller: lastNameController,
-                        decoration: InputDecoration(
-                          labelText: 'Last Name*',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
+                        decoration: _inputDecoration('Last Name*'),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your last name';
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Last name is required';
                           }
                           return null;
                         },
@@ -129,45 +87,54 @@ class _SignupPageState extends State<SignupPage> {
                   ],
                 ),
                 const SizedBox(height: 15),
+
+                // Phone
                 TextFormField(
-                  keyboardType: TextInputType.phone,
                   controller: phoneController,
-                  decoration: InputDecoration(
-                    labelText: 'Phone*',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
+                  keyboardType: TextInputType.phone,
+                  decoration: _inputDecoration('Phone*'),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your phone';
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Phone number is required';
+                    } else if (!RegExp(r'^\d{10}$').hasMatch(value.trim())) {
+                      return 'Enter a valid 10-digit phone number';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 15),
+
+                // Email
                 TextFormField(
-                  keyboardType: TextInputType.emailAddress,
                   controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email*',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: _inputDecoration('Email*'),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Email is required';
+                    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$')
+                        .hasMatch(value.trim())) {
+                      return 'Enter a valid email address';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 15),
+
+                // Referral (optional or required, adjust accordingly)
+                TextFormField(
+                  controller: referalController,
+                  decoration: _inputDecoration('Referral Code (optional)'),
+                ),
+
                 const SizedBox(height: 25),
+
+                // Submit Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
-                      handleSubmit();
-                    },
+                    onPressed: handleSubmit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
@@ -176,20 +143,22 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     child: const Text(
                       'Next',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
+                // Sign In Link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Already have account? "),
+                    const Text("Already have an account? "),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                      },
                       child: const Text(
                         "Sign in",
                         style: TextStyle(
@@ -200,7 +169,6 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -209,13 +177,20 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  @override
-void dispose() {
-  firstNameController.dispose();
-  lastNameController.dispose();
-  phoneController.dispose();
-  emailController.dispose();
-  super.dispose();
-}
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+    );
+  }
 
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    referalController.dispose();
+    super.dispose();
+  }
 }

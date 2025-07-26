@@ -52,6 +52,7 @@ class _CreatePasswordState extends State<CreatePassword> {
   void _handleCreatePassword() {
     if (_formKey.currentState!.validate()) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      print("lldsfjlfdj;dfjkdfj;dfjd;fjd;kfjdskfjds;fjds;f");
       authProvider.setPassword(
         userId: widget.userId,
         password: _passwordController.text,
@@ -81,27 +82,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 4,
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          )
-                        ],
-                      ),
-                      child: const CircleAvatar(
-                        radius: 140,
-                        backgroundImage: NetworkImage(
-                          'https://cdni.iconscout.com/illustration/premium/thumb/girl-filling-registration-papers-illustration-download-in-svg-png-gif-file-formats--document-form-application-user-detail-sign-up-pack-miscellaneous-illustrations-7508881.png?f=webp',
-                        ),
-                      ),
-                    ),
-                  ),
+                  Image.asset("assets/images/password.png"),
                   const SizedBox(height: 30),
                   const Text(
                     'Create Your New Password',

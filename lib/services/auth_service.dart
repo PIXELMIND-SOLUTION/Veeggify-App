@@ -318,23 +318,28 @@ class AuthService {
       if (otp.isEmpty) {
         throw ValidationException('OTP is required');
       }
-      if (otp.length != 6) {
-        throw ValidationException('Please enter a valid 6-digit OTP');
-      }
+      // if (otp.length != 4) {
+      //   throw ValidationException('Please enter a valid 6-digit OTP');
+      // }
       if (token.isEmpty) {
         throw ValidationException('Invalid session. Please try registering again.');
       }
 
       final url = Uri.parse('${ApiConstants.baseUrl}/verify-otp');
+      print(url);
+      print(otp);
+      print(token);
       
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'otp': otp.trim(),
+          'otp': otp,
           'token': token,
         }),
       );
+
+      print("llllllll${response.statusCode}");
 
       return _handleResponse(response);
     });
@@ -344,13 +349,17 @@ class AuthService {
     required String userId,
     required String password,
   }) async {
+        print("kkkkkkkkkkk");
+
     return _handleNetworkCall(() async {
       if (userId.isEmpty) {
         throw ValidationException('User ID is required');
       }
       _validatePassword(password);
 
+
       final url = Uri.parse('${ApiConstants.baseUrl}/set-password/$userId');
+      print("kkkkkkkk$url");
       
       final response = await http.post(
         url,
@@ -359,6 +368,11 @@ class AuthService {
           'password': password,
         }),
       );
+
+            print("kkkkkkkk${response.statusCode}");
+                        print("kkkkkkkk${response.body}");
+
+
 
       return _handleResponse(response);
     });

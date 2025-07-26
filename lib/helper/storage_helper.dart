@@ -9,6 +9,8 @@ class UserPreferences {
   static const String _keyRememberMe = 'rememberMe';
   static const String _keyPhoneNumber = 'phoneNumber';
   static const String _keyPassword = 'password';
+  static const String _keyUserId = 'userId';
+
 
   static SharedPreferences? _preferences;
 
@@ -21,7 +23,9 @@ class UserPreferences {
     final userJson = jsonEncode(user.toJson());
     await _preferences?.setString(_keyUser, userJson);
     await _preferences?.setBool(_keyIsLoggedIn, true);
+    await _preferences?.setString(_keyUserId, user.userId); 
   }
+
 
   // Get user data
   static User? getUser() {

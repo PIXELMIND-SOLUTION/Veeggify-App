@@ -1,28 +1,20 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:veegify/constants/api.dart'; 
+import 'package:veegify/constants/api.dart';
+import 'package:veegify/model/category_model.dart'; 
 
 
 class CategoryService {
-  Future<Map<String, dynamic>> register({
-    required String firstName,
-    required String lastName,
-    required String phone,
-    required String email,
-  }) async {
+  Future<Map<String, dynamic>> fetchCategory() async {
     try {
-      final url = Uri.parse(ApiConstants.register);
+      final url = Uri.parse(ApiConstants.category);
 
-      final response = await http.post(
+      final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'firstName': firstName,
-          'lastName': lastName,
-          'phone': phone,
-          'email': email,
-        }),
       );
+
+      print("Response:${response.body}");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

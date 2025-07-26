@@ -3,6 +3,11 @@ class ApiConstants {
 
   // Auth Endpoints
   static const String register = '$baseUrl/register';
+
+
+  // Category Endpoints
+
+  static const String category = '$baseUrl/category';
   
 
 

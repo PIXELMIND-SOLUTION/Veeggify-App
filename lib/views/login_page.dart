@@ -87,25 +87,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 30),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 4,
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: const CircleAvatar(
-                    radius: 140,
-                    backgroundImage: NetworkImage(
-                      'https://img.freepik.com/free-photo/delivery-man-drive-scooter-motorcycle-delivery-food-cartoon-character-concept-pink-background-3d-rendering_56104-1208.jpg',
-                    ),
-                  ),
-                ),
+                Image.asset("assets/images/login.png"),
                 const SizedBox(height: 30),
                 const Text(
                   'Welcome back glad to see you',
@@ -188,21 +170,21 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _rememberMe,
-                      onChanged: (value) {
-                        setState(() {
-                          _rememberMe = value ?? false;
-                        });
-                      },
-                    ),
-                    const Text('Remember me'),
-                  ],
-                ),
-                const SizedBox(height: 10),
+                // const SizedBox(height: 10),
+                // Row(
+                //   children: [
+                //     Checkbox(
+                //       value: _rememberMe,
+                //       onChanged: (value) {
+                //         setState(() {
+                //           _rememberMe = value ?? false;
+                //         });
+                //       },
+                //     ),
+                //     const Text('Remember me'),
+                //   ],
+                // ),
+                const SizedBox(height: 30),
                 Consumer<AuthProvider>(
                   builder: (context, authProvider, child) {
                     return SizedBox(
@@ -231,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(

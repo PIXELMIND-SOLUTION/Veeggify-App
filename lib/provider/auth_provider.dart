@@ -378,34 +378,35 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> logout(BuildContext context) async {
-    try {
-      _setLoading(true);
-      _setError(null);
+Future<void> logout(BuildContext context) async {
+  try {
+    _setLoading(true);
+    _setError(null);
 
-      // Clear user data from SharedPreferences
-      await UserPreferences.clearUserData();
+    // Clear user data from SharedPreferences
+    await UserPreferences.clearUserData();
 
-      // Clear current user and token
-      _currentUser = null;
-      _token = null;
+    // Clear current user and token
+    _currentUser = null;
+    _token = null;
 
-      ToastHelper.showSuccessToast('Logged out successfully');
+    ToastHelper.showSuccessToast('Logged out successfully');
 
-      // Navigate to login screen
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/login',
-        (route) => false,
-      );
-    } catch (e) {
-      final errorMessage = 'Logout failed: ${e.toString()}';
-      _setError(errorMessage);
-      ToastHelper.showErrorToast(errorMessage);
-    } finally {
-      _setLoading(false);
-    }
+    // Navigate to login screen and remove all previous routes
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+      (route) => false,
+    );
+  } catch (e) {
+    final errorMessage = 'Logout failed: ${e.toString()}';
+    _setError(errorMessage);
+    ToastHelper.showErrorToast(errorMessage);
+  } finally {
+    _setLoading(false);
   }
+}
+
 
   Future<void> checkLoginStatus() async {
     try {
@@ -474,10 +475,17 @@ class AuthProvider with ChangeNotifier {
       _setLoading(true);
       _setError(null);
 
+          print("pppppppp");
+
+
       await _authService.setPassword(
         userId: userId,
         password: password,
       );
+
+
+          print("ffffffff");
+
 
       ToastHelper.showSuccessToast('Password created successfully!');
 

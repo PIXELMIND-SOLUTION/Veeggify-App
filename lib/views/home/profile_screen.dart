@@ -1,10 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:veegify/helper/storage_helper.dart';
+import 'package:veegify/model/user_model.dart';
+import 'package:veegify/provider/auth_provider.dart';
 import 'package:veegify/views/home/booking_screen.dart';
 import 'package:veegify/views/home/invoice_screen.dart';
 import 'package:veegify/views/home/refer_earn_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    try {
+      // Load user ID first
+      await _loadUserId();
+    } catch (e) {
+      debugPrint('Initialization error: $e');
+    }
+  }
+
+  Future<void> _loadUserId() async {
+    final userData = UserPreferences.getUser();
+    if (userData != null) {
+      setState(() {
+        user = userData;
+      });
+    }
+  }
+
+  void _launchAboutUsUrl() async {
+    final Uri url = Uri.parse('https://web-vegiffyy.onrender.com/');
+
+    try {
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication, // or platformDefault if needed
+      )) {
+        debugPrint('Could not launch $url');
+      }
+    } catch (e) {
+      debugPrint('Launch error: $e');
+    }
+  }
+
+  void _launchPrivacyUsUrl() async {
+    final Uri url =
+        Uri.parse('https://vegiffy-policy.onrender.com/privacy-and-policy');
+
+    try {
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication, // or platformDefault if needed
+      )) {
+        debugPrint('Could not launch $url');
+      }
+    } catch (e) {
+      debugPrint('Launch error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Narasimha Varma',
+                    user!.fullName,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
                   )
                 ],
@@ -57,7 +124,7 @@ class ProfileScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Narasimhavarma123@gmail.com',
+                    user!.email,
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   )
                 ],
@@ -69,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '98989898989',
+                    user!.phoneNumber,
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   )
                 ],
@@ -94,7 +161,10 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BookingScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BookingScreen()));
                         },
                         child: Text(
                           'Orders',
@@ -128,7 +198,10 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>InvoiceScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => InvoiceScreen()));
                         },
                         child: Text(
                           'Invoices',
@@ -191,7 +264,10 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ReferEarnScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReferEarnScreen()));
                         },
                         child: Text(
                           'Refer & Earn',
@@ -235,11 +311,14 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(
                         width: 16,
                       ),
-                      Text(
-                        'Privacy Policy',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17),
-                      )
+                      GestureDetector(
+                        onTap: _launchPrivacyUsUrl,
+                        child: const Text(
+                          'Privacy Policy',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 17),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -264,11 +343,14 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(
                         width: 16,
                       ),
-                      Text(
-                        'About Us',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17),
-                      )
+                      GestureDetector(
+                        onTap: _launchAboutUsUrl,
+                        child: const Text(
+                          'About Us',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 17),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -322,10 +404,16 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(
                         width: 16,
                       ),
-                      Text(
-                        'Logout',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17),
+                      GestureDetector(
+                        onTap: () {
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .logout(context);
+                        },
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 17),
+                        ),
                       )
                     ],
                   ),

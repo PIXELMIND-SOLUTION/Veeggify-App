@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:veegify/provider/location_provider.dart';
 
 class HomeHeader extends StatelessWidget {
-  final String locationName;
+  final String userId;
   final VoidCallback onLocationTap;
-  final VoidCallback? onNotificationTap;
 
   const HomeHeader({
     super.key,
-    required this.locationName,
+    required this.userId,
     required this.onLocationTap,
-    this.onNotificationTap,
   });
 
   @override
@@ -26,32 +26,72 @@ class HomeHeader extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const Spacer(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: onLocationTap,
-              child: const Icon(
-                Icons.location_pin,
-                color: Colors.grey,
-                size: 20,
-              ),
-            ),
-            Text(
-              locationName,
-              style: const TextStyle(fontSize: 12),
-            ),
-          ],
-        ),
+        _buildLocationWidget(context),
         const SizedBox(width: 16),
-        GestureDetector(
-          onTap: onNotificationTap,
-          child: const Icon(
-            Icons.notifications_none_outlined,
-            size: 28,
-          ),
+        const Icon(
+          Icons.notifications_none_outlined,
+          size: 28,
         ),
       ],
+    );
+  }
+
+  Widget _buildLocationWidget(BuildContext context) {
+    return Consumer<LocationProvider>(
+      builder: (context, provider, _) {
+      final displayAddress = 
+          provider.address.split(' ')[1];
+        return GestureDetector(
+          onTap: onLocationTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                const Icon(
+                  Icons.location_on_outlined,
+                  size: 20,
+                  color: Color(0XFF120698),
+                ),
+                    if (provider.isLoading)
+                      const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Color(0XFF120698),
+                        ),
+                      )
+                    else if (provider.hasError)
+                      const Text(
+                        'Tap to set location',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Color(0XFF120698),
+                        ),
+                      )
+                    else
+                      SizedBox(
+                        width: 100,
+                        child: Text(
+                          displayAddress,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          // overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

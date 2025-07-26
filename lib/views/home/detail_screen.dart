@@ -9,27 +9,28 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        bottom: true,
+        top: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [
                 Image.network(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5bIe0F0e5ZBIxKHbhAXB0n-LH6dfgebNwKw&s', // Replace with your image asset
+                  'https://www.whiskaffair.com/wp-content/uploads/2018/11/Vegetable-Fried-Rice-2-3.jpg', // Replace with your image asset
                   width: double.infinity,
-                  height: 250,
+                  height: 375,
                   fit: BoxFit.cover,
                 ),
                 Positioned(
                   top: 16,
                   left: 16,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white,
+                  child: Container(
                       child: IconButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          icon: const Icon(Icons.arrow_back_ios))),
+                          icon: const Icon(Icons.arrow_back_ios,color: Colors.white,))),
                 ),
               ],
             ),

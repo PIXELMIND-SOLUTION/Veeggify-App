@@ -237,8 +237,8 @@ import 'package:veegify/helper/toast_helper.dart';
 import 'package:veegify/model/user_model.dart';
 import 'package:veegify/services/auth_service.dart';
 import 'package:veegify/views/create_password.dart';
-import 'package:veegify/views/login_page.dart';
-import 'package:veegify/views/otp_screen.dart';
+import 'package:veegify/views/Auth/login_page.dart';
+import 'package:veegify/views/Auth/otp_screen.dart';
 import 'package:veegify/views/home/navbar_screen.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -547,32 +547,35 @@ Future<void> logout(BuildContext context) async {
     }
   }
 
-  Future<void> forgotPassword({
-    required String phoneNumber,
-    required BuildContext context,
-  }) async {
-    try {
-      _setLoading(true);
-      _setError(null);
 
-      await _authService.forgotPassword(phoneNumber: phoneNumber);
+// Send OTP for forgot password
+Future<void> sendForgotPasswordOtp({
+  required String phoneNumber,
+  required BuildContext context,
+}) async {
+  // POST /forgot-password/send-otp
+  // {"phoneNumber": "9876543210"}
+}
 
-      ToastHelper.showSuccessToast('Password reset instructions sent!');
-    } on ValidationException catch (e) {
-      _setError(e.message);
-      ToastHelper.showErrorToast(e.message);
-    } on NetworkException catch (e) {
-      _setError(e.message);
-      ToastHelper.showErrorToast(e.message);
-    } on AuthException catch (e) {
-      _setError(e.message);
-      ToastHelper.showErrorToast(e.message);
-    } catch (e) {
-      final errorMessage = 'Failed to reset password: ${e.toString()}';
-      _setError(errorMessage);
-      ToastHelper.showErrorToast(errorMessage);
-    } finally {
-      _setLoading(false);
-    }
-  }
+// Verify OTP for forgot password
+Future<Map<String, dynamic>?> verifyForgotPasswordOtp({
+  required String otp,
+  required BuildContext context,
+}) async {
+  // POST /forgot-password/verify-otp
+  // {"otp": "1234"}
+  // Returns: {"userId":"123"}
+}
+
+// Reset password
+Future<void> resetPassword({
+  required String userId,
+  required String newPassword,
+  required String confirmPassword,
+  required BuildContext context,
+}) async {
+  // POST /forgot-password/reset/{userId}
+  // {"newPassword": "NewSecurePassword@123", "confirmPassword": "NewSecurePassword@123"}
+}
+
 }

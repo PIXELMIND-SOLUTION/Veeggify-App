@@ -7,6 +7,7 @@ import 'package:veegify/provider/category_provider.dart';
 import 'package:veegify/provider/location_provider.dart';
 import 'package:veegify/provider/nearby_restaurants_provider.dart';
 import 'package:veegify/provider/top_restaurants_provider.dart';
+import 'package:veegify/provider/wishlist_provider.dart';
 import 'package:veegify/widgets/bottom_navbar.dart';
 import 'package:veegify/views/splash_screen.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TopRestaurantsProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => BookingProvider()),
+        ChangeNotifierProvider(create: (_) => WishlistProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

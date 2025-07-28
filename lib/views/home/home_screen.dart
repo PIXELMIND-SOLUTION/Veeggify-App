@@ -632,7 +632,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         Provider.of<RestaurantProvider>(context, listen: false)
             .getNearbyRestaurants(userId.toString()),
         Provider.of<TopRestaurantsProvider>(context, listen: false)
-            .getTopNearbyRestaurants(userId.toString()),
+            .getTopRestaurants(userId.toString()),
         // if (userId != null) _handleCurrentLocation(),
       ]);
     } catch (e) {
@@ -916,7 +916,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   onSeeAll: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const NearbyScreen()),
+                      MaterialPageRoute(builder: (_) =>  NearbyScreen(userId:userId.toString(),)),
                     );
                   },
                 ),
@@ -929,7 +929,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => const TopRestaurantsScreen()),
+                          builder: (_) =>  TopRestaurantsScreen(userId: userId.toString(),)),
                     );
                   },
                 ),
@@ -1019,7 +1019,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           return _buildRestaurantSkeleton();
         }
 
-        if (provider.nearbyRestaurants.isEmpty) {
+        if (provider.topRestaurants.isEmpty) {
           return const SizedBox(
             height: 300,
             child: Center(child: Text('No nearby restaurants found.')),
@@ -1030,9 +1030,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           height: 270,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: provider.nearbyRestaurants.length,
+            itemCount: provider.topRestaurants.length,
             itemBuilder: (context, index) {
-              final restaurant = provider.nearbyRestaurants[index];
+              final restaurant = provider.topRestaurants[index];
               return TopRestaurantCard(
                 imagePath: restaurant.imageUrl,
                 name: restaurant.restaurantName,

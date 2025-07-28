@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veegify/helper/storage_helper.dart';
 import 'package:veegify/provider/auth_provider.dart';
-import 'package:veegify/views/login_page.dart';
+import 'package:veegify/views/Auth/login_page.dart';
 import 'package:veegify/views/home/navbar_screen.dart';
 
 class SplashScreen extends StatefulWidget {

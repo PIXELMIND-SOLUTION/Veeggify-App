@@ -6,7 +6,9 @@ import 'package:veegify/model/user_model.dart';
 import 'package:veegify/provider/auth_provider.dart';
 import 'package:veegify/views/home/booking_screen.dart';
 import 'package:veegify/views/home/invoice_screen.dart';
+import 'package:veegify/views/home/navbar_screen.dart';
 import 'package:veegify/views/home/refer_earn_screen.dart';
+import 'package:veegify/widgets/bottom_navbar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -40,6 +42,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         user = userData;
       });
     }
+  }
+
+      void _handleBackButton() {
+    // Navigate to NavbarScreen with home tab (index 0) and clear the stack
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const NavbarScreen(),
+      ),
+      (route) => false,
+    );
+    
+    // Set the bottom navigation to home tab
+    Provider.of<BottomNavbarProvider>(context, listen: false).setIndex(0);
   }
 
   void _launchAboutUsUrl() async {
@@ -85,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Row(
                 children: [
                   IconButton(
-                      onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
+                      onPressed: _handleBackButton, icon: Icon(Icons.arrow_back_ios)),
                   Text(
                     'Profile',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

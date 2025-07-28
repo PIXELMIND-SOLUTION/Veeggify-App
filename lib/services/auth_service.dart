@@ -425,14 +425,16 @@ class AuthService {
     });
   }
 
-  Future<Map<String, dynamic>> forgotPassword({
+
+    // 1. Send OTP for Forgot Password
+  Future<void> sendForgotPasswordOtp({
     required String phoneNumber,
   }) async {
     return _handleNetworkCall(() async {
       _validatePhone(phoneNumber);
 
-      final url = Uri.parse('${ApiConstants.baseUrl}/forgot-password');
-      
+      final url = Uri.parse('${ApiConstants.baseUrl}/forgot-password/send-otp');
+
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -441,7 +443,64 @@ class AuthService {
         }),
       );
 
-      return _handleResponse(response);
+      _handleResponse(response); // No need to return anything unless server returns data
     });
   }
+
+  // 2. Verify OTP for Forgot Password
+  Future<Map<String, dynamic>> verifyForgotPasswordOtp({
+    required String otp,
+  }) async {
+    return _handleNetworkCall(() async {
+      if (otp.isEmpty) {
+        throw ValidationException('OTP is required');
+      }
+
+      final url = Uri.parse('${ApiConstants.baseUrl}/forgot-password/verify-otp');
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'otp': otp,
+        }),
+      );
+
+      return _handleResponse(response); // Expected to return { userId: 'xyz' }
+    });
+  }
+
+  // 3. Reset Password after OTP Verification
+  Future<void> resetPassword({
+    required String userId,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    return _handleNetworkCall(() async {
+      if (userId.isEmpty) {
+        throw ValidationException('User ID is required');
+      }
+
+      _validatePassword(newPassword);
+      if (newPassword != confirmPassword) {
+        throw ValidationException('Passwords do not match');
+      }
+
+      final url = Uri.parse('${ApiConstants.baseUrl}/forgot-password/reset/$userId');
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'newPassword': newPassword,
+          'confirmPassword': confirmPassword,
+        }),
+      );
+
+      _handleResponse(response); // No return needed unless required
+    });
+  }
+
+
+
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:veegify/provider/auth_provider.dart';
-import 'package:veegify/views/login_page.dart';
+import 'package:veegify/views/Auth/login_page.dart';
 
 class ScreenOtp extends StatefulWidget {
   const ScreenOtp({super.key});

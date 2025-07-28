@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veegify/helper/storage_helper.dart';
 import 'package:veegify/provider/auth_provider.dart';
-import 'package:veegify/views/signup_page.dart';
+import 'package:veegify/views/Auth/signup_page.dart';
+import 'package:veegify/views/ForgotPassword/forgot_password_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -218,10 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // Navigate to forgot password screen
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Forgot password feature coming soon!')),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordScreen()));
                     },
                     child: const Text('Forgot Your Password?'),
                   ),

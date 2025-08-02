@@ -47,9 +47,11 @@ class WishlistResponse {
     return WishlistResponse(
       message: json['message'] ?? '',
       isInWishlist: json['isInWishlist'],
-      wishlistIds: json['wishlist'] is List<String> 
-          ? List<String>.from(json['wishlist'])
-          : null,
+      wishlistIds: json['wishlist'] is List
+    ? List<String>.from(
+        json['wishlist'].map((item) => item['_id'].toString()))
+    : null,
+
       wishlist: json['wishlist'] is List<dynamic> && 
                 json['wishlist'].isNotEmpty && 
                 json['wishlist'][0] is Map<String, dynamic>

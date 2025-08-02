@@ -14,7 +14,7 @@ class CategoryService {
         headers: {'Content-Type': 'application/json'},
       );
 
-      print("Response:${response.body}");
+      print("Responseeeeeeeeeeeeeeeeeeeeeeee:${response.body}");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

@@ -8,6 +8,7 @@ class WishlistService {
   // Toggle wishlist (add or remove)
   static Future<WishlistResponse> toggleWishlist(String userId, String productId) async {
     try {
+
       final response = await http.post(
         Uri.parse('$baseUrl/wishlist/$userId'),
         headers: {
@@ -31,12 +32,18 @@ class WishlistService {
   // Get wishlist
   static Future<WishlistResponse> getWishlist(String userId) async {
     try {
+
+                        print("URL: ${'$baseUrl/wishlist/$userId'}");
+
       final response = await http.get(
         Uri.parse('$baseUrl/wishlist/$userId'),
         headers: {
           'Content-Type': 'application/json',
         },
       );
+
+                  print("URL: ${'$baseUrl/wishlist/$userId'}");
+
 
       if (response.statusCode == 200) {
         return WishlistResponse.fromJson(jsonDecode(response.body));

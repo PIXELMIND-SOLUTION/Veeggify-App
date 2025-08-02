@@ -356,7 +356,7 @@ class _TopRestaurantsScreenState extends State<TopRestaurantsScreen> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RestaurantDetailScreen(),
+                            builder: (context) => RestaurantDetailScreen(restaurantId: "688787e3a2cb93cc3b9d4af4",),
                           ),
                         ),
                         child: Container(

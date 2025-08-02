@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:veegify/views/Category/category_based_screen.dart';
 
 class CategoryCard extends StatelessWidget {
+  final String id;
   final String imagePath;
   final String title;
 
   const CategoryCard({
     super.key,
+    required this.id,
     required this.imagePath,
     required this.title,
   });
@@ -15,7 +17,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryBasedScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryBasedScreen(categoryId:id, title: title)));
       },
       child: Container(
         width: 100,

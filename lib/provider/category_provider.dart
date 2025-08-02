@@ -25,6 +25,7 @@ class CategoryProvider with ChangeNotifier {
       final response = await _categoryService.fetchCategory();
 
       if (response['success'] == true && response['data'] != null) {
+        print("Response Data DSDSDSD${response['success']}");
         _categories = (response['data'] as List)
             .map((item) => Category.fromJson(item))
             .toList();

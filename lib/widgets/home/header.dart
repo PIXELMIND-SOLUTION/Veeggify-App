@@ -43,52 +43,39 @@ class HomeHeader extends StatelessWidget {
           provider.address.split(' ')[1];
         return GestureDetector(
           onTap: onLocationTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                const Icon(
-                  Icons.location_on_outlined,
-                  size: 20,
-                  color: Color(0XFF120698),
+          child: Column(
+            children: [
+          const Icon(
+            Icons.location_on_outlined,
+            size: 20,
+            color: Color(0XFF120698),
+          ),
+              if (provider.isLoading)
+                const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Color.fromARGB(255, 170, 170, 170),
+                  ),
+                )
+              else if (provider.hasError)
+                const Text(
+                  'Tap to set location',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Color(0XFF120698),
+                  ),
+                )
+              else
+                Text(
+                  displayAddress,
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                  // overflow: TextOverflow.ellipsis,
                 ),
-                    if (provider.isLoading)
-                      const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Color(0XFF120698),
-                        ),
-                      )
-                    else if (provider.hasError)
-                      const Text(
-                        'Tap to set location',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Color(0XFF120698),
-                        ),
-                      )
-                    else
-                      SizedBox(
-                        width: 100,
-                        child: Text(
-                          displayAddress,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          // overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                  ],
-                ),
-              ],
-            ),
+            ],
           ),
         );
       },

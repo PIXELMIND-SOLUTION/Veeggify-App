@@ -21,7 +21,7 @@ class RestaurantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>RestaurantDetailScreen())),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>RestaurantDetailScreen(restaurantId: "688787e3a2cb93cc3b9d4af4"))),
       child: Container(
         margin: EdgeInsets.only(right: 12),
         width: 186,

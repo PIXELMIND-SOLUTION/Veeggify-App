@@ -10,7 +10,7 @@ class WishlistProvider extends ChangeNotifier {
 
   // Getters
   List<Product> get wishlistItems => _wishlistItems;
-  List<String> get wishlistIds => _wishlistIds;
+  List<dynamic> get wishlistIds => _wishlistIds;
   bool get isLoading => _isLoading;
   String get error => _error;
   int get wishlistCount => _wishlistItems.length;

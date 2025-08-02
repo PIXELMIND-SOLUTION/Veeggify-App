@@ -1,79 +1,88 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../provider/banner_provider.dart';
 
-class PromoBanner extends StatelessWidget {
-  final String titleLine1;
-  final String titleLine2;
-  final String buttonText;
-  final VoidCallback onPressed;
-  final String imageAssetPath;
-  final Color backgroundColor;
-  final double borderRadius;
+class PromoBanner extends StatefulWidget {
+  const PromoBanner({super.key});
 
-  const PromoBanner({
-    super.key,
-    required this.titleLine1,
-    required this.titleLine2,
-    required this.buttonText,
-    required this.onPressed,
-    required this.imageAssetPath,
-    this.backgroundColor = const Color(0xFFEFFBF9),
-    this.borderRadius = 16.0,
-  });
+  @override
+  State<PromoBanner> createState() => _PromoBannerState();
+}
+
+class _PromoBannerState extends State<PromoBanner> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(borderRadius),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  titleLine1,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+    final bannerProvider = Provider.of<BannerProvider>(context);
+
+    if (bannerProvider.isLoading) {
+      return const SizedBox(
+        height: 180,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (bannerProvider.banners.isEmpty) {
+      return const SizedBox(
+        height: 180,
+        child: Center(child: Text('No banners available')),
+      );
+    }
+
+    return Column(
+      children: [
+        CarouselSlider(
+          items: bannerProvider.banners
+              .map(
+                (banner) => ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    banner.imageUrl,
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                    loadingBuilder: (context, child, progress) {
+                      if (progress == null) return child;
+                      return Container(
+                        color: Colors.grey[200],
+                        child: const Center(child: CircularProgressIndicator()),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Center(child: Icon(Icons.error)),
                   ),
                 ),
-                Text(
-                  titleLine2,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 36,
-                  child: ElevatedButton(
-                    onPressed: onPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
-                    child: Text(buttonText),
-                  ),
-                ),
-              ],
-            ),
+              )
+              .toList(),
+          options: CarouselOptions(
+            height: 130,
+            autoPlay: true,
+            enlargeCenterPage: true,
+            viewportFraction: 0.95,
+            onPageChanged: (index, reason) {
+              setState(() => _currentIndex = index);
+            },
           ),
-          Image.asset(
-            imageAssetPath,
-            width: 106,
-            height: 106,
-            fit: BoxFit.contain,
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: bannerProvider.banners.asMap().entries.map((entry) {
+            return Container(
+              width: 8.0,
+              height: 8.0,
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _currentIndex == entry.key
+                    ? Colors.green
+                    : Colors.grey.shade400,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }

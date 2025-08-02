@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veegify/helper/storage_helper.dart';
 import 'package:veegify/provider/auth_provider.dart';
+import 'package:veegify/provider/location_provider.dart';
 import 'package:veegify/views/Auth/login_page.dart';
 import 'package:veegify/views/home/navbar_screen.dart';
 
@@ -13,10 +14,41 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+    String? userId;
+
   @override
   void initState() {
     super.initState();
     _checkLoginStatus();
+  }
+
+    Future<void> _loadUserId() async {
+    final user = UserPreferences.getUser();
+    if (user != null && mounted) {
+      setState(() {
+        userId = user.userId;
+      });
+    }
+  }
+
+
+    Future<void> _handleCurrentLocation() async {
+    try {
+      final locationProvider =
+          Provider.of<LocationProvider>(context, listen: false);
+      await locationProvider.initLocation(userId.toString());
+    } catch (e) {
+      debugPrint('Location error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Location error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _checkLoginStatus() async {
@@ -32,6 +64,8 @@ class _SplashScreenState extends State<SplashScreen> {
     
     // Navigate based on login status
     if (UserPreferences.isLoggedIn()) {
+      await _loadUserId();
+      await _handleCurrentLocation();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => NavbarScreen()),

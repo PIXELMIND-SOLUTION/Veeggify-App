@@ -71,7 +71,7 @@ class CategoryScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final category = provider.categories[index];
                         return GestureDetector(
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryBasedScreen())),
+                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryBasedScreen(categoryId: category.id, title: category.categoryName))),
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(

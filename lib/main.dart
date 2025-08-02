@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veegify/provider/auth_provider.dart';
+import 'package:veegify/provider/banner_provider.dart';
 import 'package:veegify/provider/booking_provider.dart';
 import 'package:veegify/provider/cart_provider.dart';
 import 'package:veegify/provider/category_provider.dart';
 import 'package:veegify/provider/location_provider.dart';
 import 'package:veegify/provider/nearby_restaurants_provider.dart';
+import 'package:veegify/provider/restaurant_products_provider.dart';
 import 'package:veegify/provider/top_restaurants_provider.dart';
 import 'package:veegify/provider/wishlist_provider.dart';
 import 'package:veegify/widgets/bottom_navbar.dart';
@@ -32,6 +34,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => BookingProvider()),
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
+        ChangeNotifierProvider(create: (_) => BannerProvider()),
+        ChangeNotifierProvider(create: (_) => RestaurantProductsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

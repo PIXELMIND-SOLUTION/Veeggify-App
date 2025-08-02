@@ -1,5 +1,5 @@
 class Category {
-  final int id;
+  final String id;
   final String categoryName;
   final String imageUrl;
 
@@ -11,7 +11,7 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['id'],
+      id: json['_id'],
       categoryName: json['categoryName'],
       imageUrl: json['imageUrl'],
     );
